@@ -1,30 +1,83 @@
 
 function love.load()
-    x, y, w, h = 0, 0, 960, 540
-    love.window.setMode(w, h)
+    WindowXPosition, WindowYPosition, WindowWidth, WindowHeight, Scale= 0, 0, 960, 540, 20
 
-    tetraminos = {}
-    addTetramino(createTetrimino())
+    DropInterval, DropSum = 1, 0
+
+    love.window.setMode(WindowWidth, WindowHeight)
+
+    Tetraminos = {}
+    AddTetramino(CreateTetrimino())
+
+    SpawnTetramino(Tetraminos[1]);
 end
 
 function love.draw()
     love.graphics.setColor(0,0.4,0.4)
-    love.graphics.rectangle("fill", x, y ,w ,h)
+    love.graphics.rectangle("fill", WindowXPosition, WindowYPosition ,WindowWidth ,WindowHeight)
+    DrawTetraminos()
 end
 
-function love.update()
-    for i=1, #tetraminos, 1 do
-        print(i, tetraminos[i].id)
+function love.update(dt)
+    DropSum = DropSum + dt
+    if DropSum >= DropInterval then
+        DropTetraminos()
+        DropSum = DropSum - DropInterval
+    end
+
+end
+
+function DropTetraminos()
+    local function drop(tetramino)
+        tetramino.positionY = tetramino.positionY + Scale
+    end
+
+    LoopTetraminos(drop)
+end
+
+function DrawTetraminos()
+    for i=1, #Tetraminos, 1 do
+        DrawTetramino(Tetraminos[i])
     end
 end
 
-function createTetrimino()
+function DrawTetramino(tetramino)
+    if tetramino == nil or tetramino.onScreen == false then 
+        return
+    end
+    love.graphics.setColor(tetramino.color.r, tetramino.color.g, tetramino.color.b)
+    love.graphics.rectangle("fill", tetramino.positionX, tetramino.positionY, tetramino.width, tetramino.heigth)
+end
+
+function CreateTetrimino()
     local squareBlock = {
-        id = "2x2"
+        id = "2x2",
+        onScreen = false
     }
     return squareBlock;
 end
 
-function addTetramino(tetramino)
-    table.insert(tetraminos, tetramino)
+function AddTetramino(tetramino)
+    table.insert(Tetraminos, tetramino)
+end
+
+function SpawnTetramino(tetramino)
+    tetramino.width = 2 * Scale
+    tetramino.heigth = 2 * Scale
+    tetramino.color = {
+        r = 234,
+        g = 221,
+        b = 202
+    }
+
+    tetramino.positionX = WindowWidth/2 - tetramino.width
+    tetramino.positionY = 0 + tetramino.heigth
+
+    tetramino.onScreen = true;
+end
+
+function LoopTetraminos(callback)
+    for i=1, #Tetraminos, 1 do
+        callback(Tetraminos[i])
+    end
 end
