@@ -32,13 +32,11 @@ function DropTetraminos()
         tetramino.positionY = tetramino.positionY + Scale
     end
 
-    LoopTetraminos(drop)
+    ApplyToTetraminos(drop)
 end
 
 function DrawTetraminos()
-    for i=1, #Tetraminos, 1 do
-        DrawTetramino(Tetraminos[i])
-    end
+    ApplyToTetraminos(DrawTetramino)
 end
 
 function DrawTetramino(tetramino)
@@ -76,7 +74,7 @@ function SpawnTetramino(tetramino)
     tetramino.onScreen = true;
 end
 
-function LoopTetraminos(callback)
+function ApplyToTetraminos(callback)
     for i=1, #Tetraminos, 1 do
         callback(Tetraminos[i])
     end
