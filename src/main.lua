@@ -5,48 +5,48 @@ function love.load()
 
     love.window.setMode(WindowWidth, WindowHeight)
 
-    Tetraminos = {}
-    AddTetramino(CreateTetrimino())
+    Blocks = {}
+    AddBlock(CreateTetrimino())
 
-    SpawnTetramino(Tetraminos[1]);
+    SpawnBlock(Blocks[1]);
 end
 
 function love.draw()
     love.graphics.setColor(0, 0.4, 0.4)
     love.graphics.rectangle("fill", WindowXPosition, WindowYPosition, WindowWidth, WindowHeight)
-    DrawTetraminos()
+    DrawBlocks()
 end
 
 function love.update(dt)
     DropSum = DropSum + dt
     if DropSum >= DropInterval then
-        DropTetraminos()
+        DropBlocks()
         DropSum = DropSum - DropInterval
     end
 end
 
-function DropTetraminos()
-    local function drop(tetramino)
-        tetramino.positionY = tetramino.positionY + Scale
+function DropBlocks()
+    local function drop(block)
+        block.positionY = block.positionY + Scale
     end
 
-    ApplyToTetraminos(drop)
+    ApplyToBlocks(drop)
 end
 
-function DrawTetraminos()
-    ApplyToTetraminos(DrawTetramino)
+function DrawBlocks()
+    ApplyToBlocks(DrawBlock)
 end
 
-function DrawTetramino(tetramino)
-    if tetramino == nil or tetramino.onScreen == false then
+function DrawBlock(block)
+    if block == nil or block.onScreen == false then
         return
     end
     love.graphics.setColor(0, 0, 0)
-    love.graphics.rectangle("fill", tetramino.positionX, tetramino.positionY, tetramino.width, tetramino.heigth)
+    love.graphics.rectangle("fill", block.positionX, block.positionY, block.width, block.heigth)
 
-    love.graphics.setColor(tetramino.color.r, tetramino.color.g, tetramino.color.b)
-    love.graphics.rectangle("fill", tetramino.positionX + (Scale / 10), tetramino.positionY + (Scale / 10),
-        tetramino.width - (Scale / 5), tetramino.heigth - (Scale / 5))
+    love.graphics.setColor(block.color.r, block.color.g, block.color.b)
+    love.graphics.rectangle("fill", block.positionX + (Scale / 10), block.positionY + (Scale / 10),
+        block.width - (Scale / 5), block.heigth - (Scale / 5))
 end
 
 function CreateTetrimino()
@@ -57,27 +57,27 @@ function CreateTetrimino()
     return squareBlock;
 end
 
-function AddTetramino(tetramino)
-    table.insert(Tetraminos, tetramino)
+function AddBlock(block)
+    table.insert(Blocks, block)
 end
 
-function SpawnTetramino(tetramino)
-    tetramino.width = 2 * Scale
-    tetramino.heigth = 2 * Scale
-    tetramino.color = {
+function SpawnBlock(block)
+    block.width = 2 * Scale
+    block.heigth = 2 * Scale
+    block.color = {
         r = 234,
         g = 221,
         b = 202
     }
 
-    tetramino.positionX = WindowWidth / 2 - tetramino.width
-    tetramino.positionY = 0 + tetramino.heigth
+    block.positionX = WindowWidth / 2 - block.width
+    block.positionY = 0 + block.heigth
 
-    tetramino.onScreen = true;
+    block.onScreen = true;
 end
 
-function ApplyToTetraminos(callback)
-    for i = 1, #Tetraminos, 1 do
-        callback(Tetraminos[i])
+function ApplyToBlocks(callback)
+    for i = 1, #Blocks, 1 do
+        callback(Blocks[i])
     end
 end
