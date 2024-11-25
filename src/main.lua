@@ -1,6 +1,5 @@
-
 function love.load()
-    WindowXPosition, WindowYPosition, WindowWidth, WindowHeight, Scale= 0, 0, 960, 540, 20
+    WindowXPosition, WindowYPosition, WindowWidth, WindowHeight, Scale = 0, 0, 960, 540, 20
 
     DropInterval, DropSum = 1, 0
 
@@ -13,8 +12,8 @@ function love.load()
 end
 
 function love.draw()
-    love.graphics.setColor(0,0.4,0.4)
-    love.graphics.rectangle("fill", WindowXPosition, WindowYPosition ,WindowWidth ,WindowHeight)
+    love.graphics.setColor(0, 0.4, 0.4)
+    love.graphics.rectangle("fill", WindowXPosition, WindowYPosition, WindowWidth, WindowHeight)
     DrawTetraminos()
 end
 
@@ -24,7 +23,6 @@ function love.update(dt)
         DropTetraminos()
         DropSum = DropSum - DropInterval
     end
-
 end
 
 function DropTetraminos()
@@ -40,11 +38,15 @@ function DrawTetraminos()
 end
 
 function DrawTetramino(tetramino)
-    if tetramino == nil or tetramino.onScreen == false then 
+    if tetramino == nil or tetramino.onScreen == false then
         return
     end
-    love.graphics.setColor(tetramino.color.r, tetramino.color.g, tetramino.color.b)
+    love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", tetramino.positionX, tetramino.positionY, tetramino.width, tetramino.heigth)
+
+    love.graphics.setColor(tetramino.color.r, tetramino.color.g, tetramino.color.b)
+    love.graphics.rectangle("fill", tetramino.positionX + (Scale / 10), tetramino.positionY + (Scale / 10),
+        tetramino.width - (Scale / 5), tetramino.heigth - (Scale / 5))
 end
 
 function CreateTetrimino()
@@ -68,14 +70,14 @@ function SpawnTetramino(tetramino)
         b = 202
     }
 
-    tetramino.positionX = WindowWidth/2 - tetramino.width
+    tetramino.positionX = WindowWidth / 2 - tetramino.width
     tetramino.positionY = 0 + tetramino.heigth
 
     tetramino.onScreen = true;
 end
 
 function ApplyToTetraminos(callback)
-    for i=1, #Tetraminos, 1 do
+    for i = 1, #Tetraminos, 1 do
         callback(Tetraminos[i])
     end
 end
