@@ -29,9 +29,33 @@ function DropBlocks()
     local function drop(block)
         block.positionY = block.positionY + Scale
     end
-
-    ApplyToBlocks(drop)
+    for i = 1, #Blocks, 1 do
+        local block = Blocks[i]
+        if (CollidesWithFloor(block)) then
+            drop(Blocks[i])
+        end
+    end
 end
+
+function CollidesWithFloor(block)
+    local lowestYCoordinate = GetBlocksLowestPoint(block)
+    return lowestYCoordinate >= WindowHeight
+end
+
+function GetBlocksLowestPoint(block)
+    local square = function(block) 
+        local stacks = (WindowHeight - block.positionX) / (2 * Scale)
+        return stacks > 1
+    end
+    local switch = {
+        ["2x2"] = square
+    }
+
+    local func = switch[block.id]
+
+    return func(block)
+end
+
 
 function DrawBlocks()
     ApplyToBlocks(DrawBlock)
