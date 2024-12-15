@@ -31,7 +31,7 @@ function DropBlocks()
     end
     for i = 1, #Blocks, 1 do
         local block = Blocks[i]
-        if (CollidesWithFloor(block)) then
+        if (not CollidesWithFloor(block)) then
             drop(Blocks[i])
         end
     end
@@ -44,8 +44,7 @@ end
 
 function GetBlocksLowestPoint(block)
     local square = function(block) 
-        local stacks = (WindowHeight - block.positionX) / (2 * Scale)
-        return stacks > 1
+	    return block.positionY + Scale * 2
     end
     local switch = {
         ["2x2"] = square
